@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для любимки</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Magilio&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Arial', sans-serif;
+            color: rgb(117, 75, 106);
+        }
+
+        .step {
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+
+        .container {
+            margin-top: 50px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        #noButton.hidden {
+            display: none;
+        }
+
+        .form-control,
+        .btn {
+            border-radius: 20px;
+            border: 2px solid #ff69b4;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-control {
+            background-color: #ffe4e1;
+            color: #ff69b4;
+        }
+
+        .form-control::placeholder {
+            color: #ff69b4;
+        }
+
+        .form-control:focus,
+        .form-control:hover {
+            background-color: #ffc0cb;
+            border-color: #ff69b4;
+            color: #ff69b4;
+            box-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
+        }
+
+        .form-control:focus {
+            outline: none;
+        }
+
+        .btn-primary {
+            background-color: #ff69b4;
+            border-color: #ff69b4;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus,
+        .btn-primary:active,
+        .btn-primary:focus-visible {
+            background-color: #ff85b4;
+            border-color: #ff69b4;
+            box-shadow: 0 0 5px rgba(255, 105, 180, 0.5) !important;
+            color: #fff !important;
+        }
+
+        .btn-primary:focus,
+        .btn-primary:active,
+        .btn-primary:focus-visible {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-danger {
+            background-color: #ffb6c1;
+            border-color: #ffb6c1;
+            color: #ffffff;
+        }
+
+        .btn-danger:hover,
+        .btn-danger:focus,
+        .btn-danger:active,
+        .btn-danger:focus-visible {
+            background-color: #ffc9d1;
+            border-color: #ffb6c1;
+            color: #ffffff;
+            box-shadow: 0 0 5px rgba(255, 105, 180, 0.5) !important;
+        }
+
+        .btn-danger:focus,
+        .btn-danger:active,
+        .btn-danger:focus-visible {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        .magilio-font {
+            font-family: 'Magilio', cursive;
+        }
+
+        .center-img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .bow-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div id="step1" class="step active text-center">
+                    <h2 class="magilio-font"><img src="heart.webp" height="40px"> Wanna date? <img src="heart.webp"
+                            height="40px"></h2>
+                    <button id="yesButton" class="btn btn-danger m-2" onclick="makeChoice('yes')"><img src="yeah.webp"
+                            height="60px"></button>
+                    <button id="noButton" class="btn btn-danger m-2" onclick="makeChoice('no')"><img src="no.webp"
+                            height="60px"></button>
+                </div>
+
+                <div id="step2" class="step text-center">
+                    <h2 class="magilio-font">Котёнка, выбери когда</h2>
+                    <img src="cat.webp" height="80px" class="center-img">
+                    <div class="form-group mb-3">
+                        <label for="datePicker" class="form-label magilio-font">Дата:</label>
+                        <input type="date" class="form-control" id="datePicker">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="timePicker" class="form-label magilio-font">Время:</label>
+                        <input type="time" class="form-control" id="timePicker">
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-danger" onclick="submitDateTime()">(´• ω •`) ♡</button>
+                    </div>
+                </div>
+
+                <div id="step3" class="step text-center">
+                    <h2>&#128151;</h2>
+                    <p id="summary" class="magilio-font"></p>
+                    <div class="bow-container">
+                        <img src="bow.webp" height="40px">
+                        <img src="bow.webp" height="40px">
+                        <img src="bow.webp" height="40px">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script>
+        let choice;
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const datePicker = document.getElementById('datePicker');
+            const today = new Date();
+            const minDate = new Date(today);
+            minDate.setDate(today.getDate() + 1);
+            const maxDate = new Date(minDate);
+            maxDate.setDate(minDate.getDate() + 6);
+
+            datePicker.setAttribute('min', minDate.toISOString().split('T')[0]);
+            datePicker.setAttribute('max', maxDate.toISOString().split('T')[0]);
+        });
+
+        function makeChoice(userChoice) {
+            choice = userChoice;
+            if (userChoice === 'no') {
+                document.getElementById('noButton').classList.add('hidden');
+            } else {
+                document.getElementById('step1').classList.remove('active');
+                document.getElementById('step2').classList.add('active');
+            }
+        }
+
+        function submitDateTime() {
+            const date = document.getElementById('datePicker').value;
+            const time = document.getElementById('timePicker').value;
+
+            if (date && time) {
+                document.getElementById('step2').classList.remove('active');
+                document.getElementById('step3').classList.add('active');
+                document.getElementById('summary').innerText = `Ты мой любимый человечек`;
+
+                sendDateTimeToServer(date, time);
+            } else {
+                alert("Дашутка, укажи дату и время");
+            }
+        }
+
+        function sendDateTimeToServer(date, time) {
+            const url = new URL("https://prod-98.westeurope.logic.azure.com:443/workflows/bfd379f98fa74f1cb9a866a3dc63bc03/triggers/manual/paths/invoke");
+            url.searchParams.append('api-version', '2016-06-01');
+            url.searchParams.append('sp', '/triggers/manual/run');
+            url.searchParams.append('sv', '1.0');
+            url.searchParams.append('sig', 'Wc2z80sBf1iz5G9q8Rkhtt23dQqypdVDRnRATV7Tso0');
+            url.searchParams.append('date', date);
+            url.searchParams.append('time', time);
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+
+</html>
